@@ -273,6 +273,8 @@ int CRARFileSource::ScanArchive (wchar_t *archive_name, CRFSList<CRFSFile> *file
 	CRFSFile *file = NULL;
 
 	*ok_files_found = 0;
+	int compressed_files_found = 0;
+	int encrypted_files_found = 0;
 	LARGE_INTEGER zero = {0};
 
 	MediaType *mType;
@@ -506,12 +508,14 @@ int CRARFileSource::ScanArchive (wchar_t *archive_name, CRFSList<CRFSFile> *file
 
 				if (rh.ch.flags & LHD_PASSWORD)
 				{
+					encrypted_files_found++;
 					DbgLog((LOG_TRACE, 2, L"Encrypted files are not supported."));
 					file->unsupported = true;
 				}
 
 				if (rh.fh.method != 0x30)
 				{
+					compressed_files_found++;
 					DbgLog((LOG_TRACE, 2, L"Compressed files are not supported."));
 					file->unsupported = true;
 				}
@@ -673,6 +677,23 @@ int CRARFileSource::ScanArchive (wchar_t *archive_name, CRFSList<CRFSFile> *file
 		ErrorMsg (0, L"Couldn't find all archive volumes.");
 	}
 
+	// only show error messages if no usable file was found
+	if (*ok_files_found == 0)
+	{
+		if (encrypted_files_found > 0)
+		{
+			ErrorMsg (0, L"Encrypted files are not supported.");
+		}
+		else if (compressed_files_found > 0)
+		{
+			ErrorMsg (0, L"Compressed files are not supported.");
+		}
+		else
+        {
+			ErrorMsg (0, L"No media files found in the archive.");
+		}
+	}
+
 	return files;
 }
 
@@ -776,7 +797,6 @@ STDMETHODIMP CRARFileSource::Load (LPCOLESTR lpwszFileName, const AM_MEDIA_TYPE 
 
 	if (!num_ok_files)
 	{
-		ErrorMsg (0, L"No media files found in the archive.");
 		return E_UNEXPECTED; // TODO: Figure out a better error code.
 	}
 
