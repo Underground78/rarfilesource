@@ -28,10 +28,6 @@
 #include "File.h"
 
 
-// {9FFE11D2-29F2-463f-AD5F-C04A5EE2E58D}
-DEFINE_GUID(CLSID_RARFileSource,
-0x9ffe11d2, 0x29f2, 0x463f, 0xad, 0x5f, 0xc0, 0x4a, 0x5e, 0xe2, 0xe5, 0x8d);
-
 #define RFS_GUID_STRING "{9FFE11D2-29F2-463f-AD5F-C04A5EE2E58D}"
 
 
@@ -61,7 +57,7 @@ const AMOVIESETUP_PIN sudpPin =
 
 const AMOVIESETUP_FILTER sudRARFileSource =
 {
-	&CLSID_RARFileSource,	// Filter CLSID
+	&__uuidof(CRARFileSource),	// Filter CLSID
 	RARFileSourceName,		// Filter name
 	MERIT_UNLIKELY,			// Filter merit
 	1,						// Number of pins
@@ -74,7 +70,7 @@ CFactoryTemplate g_Templates [] =
 {
 	{
 		RARFileSourceName,
-		&CLSID_RARFileSource,
+		&__uuidof(CRARFileSource),
 		CRARFileSource::CreateInstance,
 		NULL,
 		&sudRARFileSource
@@ -202,7 +198,7 @@ STDAPI DllUnregisterServer ()
 }
 
 CRARFileSource::CRARFileSource (LPUNKNOWN punk, HRESULT *phr) :
-	CBaseFilter (RARFileSourceName, punk, &m_lock, CLSID_RARFileSource),
+	CBaseFilter (RARFileSourceName, punk, &m_lock, __uuidof(CRARFileSource)),
 	m_pin (this, &m_lock, phr),
 	m_file_name (NULL),
 	m_file (NULL)
