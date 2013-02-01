@@ -25,7 +25,8 @@ typedef struct
 	const GUID *guid;
 } file_type_t;
 
-class CRARFileSource :
+class __declspec(uuid("9FFE11D2-29F2-463f-AD5F-C04A5EE2E58D"))
+    CRARFileSource :
 	public CBaseFilter,
 	public IFileSourceFilter
 {
