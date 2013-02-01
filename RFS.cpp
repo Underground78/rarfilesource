@@ -94,6 +94,7 @@ file_type_t CRARFileSource::s_file_types [] =
 	{ "mka", &MEDIASUBTYPE_Matroska },
 	{ "mks", &MEDIASUBTYPE_Matroska },
 	{ "mov", &MEDIASUBTYPE_QTMovie },
+	{ "mp4", &MEDIASUBTYPE_QTMovie },
 	{ "wav", &MEDIASUBTYPE_WAVE },
 	{ "mp3", &MEDIASUBTYPE_MPEG1Audio },
 	{ "mpa", &MEDIASUBTYPE_MPEG1Audio },
