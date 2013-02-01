@@ -45,7 +45,9 @@ void ErrorMsg (DWORD errorCode, wchar_t *format, ...)
 	}
 
 	DbgLog((LOG_ERROR, 0, L"%s", buffer));
+#ifdef STANDALONE_FILTER
 	MessageBox (NULL, buffer, RARFileSourceName, MB_OK | MB_ICONERROR);
+#endif
 }
 
 #ifdef _DEBUG
