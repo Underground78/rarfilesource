@@ -22,16 +22,16 @@
 
 static int compare (const void *pos, const void *part)
 {
-	if (*((LONGLONG *) pos) < ((FilePart *) part)->in_file_offset)
+	if (*((LONGLONG *) pos) < ((CRFSFilePart *) part)->in_file_offset)
 		return -1;
 
-	if (*((LONGLONG *) pos) >= ((FilePart *) part)->in_file_offset + ((FilePart *) part)->size)
+	if (*((LONGLONG *) pos) >= ((CRFSFilePart *) part)->in_file_offset + ((CRFSFilePart *) part)->size)
 		return 1;
 
 	return 0;
 }
 
-int File::FindStartPart (LONGLONG position)
+int CRFSFile::FindStartPart (LONGLONG position)
 {
 	if (position > size)
 		return -1;
@@ -40,7 +40,7 @@ int File::FindStartPart (LONGLONG position)
 	if (m_prev_part && !compare (&position, m_prev_part))
 		return (int) (m_prev_part - array);
 
-	m_prev_part = (FilePart *) bsearch (&position, array, parts, sizeof (FilePart), compare);
+	m_prev_part = (CRFSFilePart *) bsearch (&position, array, parts, sizeof (CRFSFilePart), compare);
 
 	if (!m_prev_part)
 		return -1;
@@ -48,7 +48,7 @@ int File::FindStartPart (LONGLONG position)
 	return (int) (m_prev_part - array);
 }
 
-HRESULT File::SyncRead (LONGLONG llPosition, DWORD lLength, BYTE* pBuffer, LONG *cbActual)
+HRESULT CRFSFile::SyncRead (LONGLONG llPosition, DWORD lLength, BYTE* pBuffer, LONG *cbActual)
 {
 	OVERLAPPED o;
 	LARGE_INTEGER offset;
@@ -76,7 +76,7 @@ HRESULT File::SyncRead (LONGLONG llPosition, DWORD lLength, BYTE* pBuffer, LONG 
 		last_pos = pos;
 	}
 #endif
-	FilePart *part = array + pos;
+	CRFSFilePart *part = array + pos;
 
 	offset2 = llPosition - part->in_file_offset;
 	offset.QuadPart = part->in_rar_offset + offset2;

@@ -17,14 +17,14 @@
 #ifndef LIST_H
 #define LIST_H
 
-template <class T> class List;
+template <class T> class CRFSList;
 
-template <class T> class Node
+template <class T> class CRFSNode
 {
-	friend class List<T>;
+	friend class CRFSList<T>;
 
 public:
-	Node (void) : next (NULL), prev (NULL) { }
+	CRFSNode (void) : next (NULL), prev (NULL) { }
 
 	void Unlink (void)
 	{
@@ -33,36 +33,36 @@ public:
 	}
 
 private:
-	Node (Node *next, Node *prev) : next (next), prev (prev) { }
+	CRFSNode (CRFSNode *next, CRFSNode *prev) : next (next), prev (prev) { }
 
-	Node *next;
-	Node *prev;
+	CRFSNode *next;
+	CRFSNode *prev;
 };
 
-template <class T> class List
+template <class T> class CRFSList
 {
 public:
-	List (bool auto_clear = false) : anchor (&anchor, &anchor), clear (auto_clear) { }
-	~List () { if (clear) Clear (); }
+	CRFSList (bool auto_clear = false) : anchor (&anchor, &anchor), clear (auto_clear) { }
+	~CRFSList () { if (clear) Clear (); }
 
 	bool IsEmpty (void) { return anchor.next == &anchor; }
 
 	T *First (void) { return Next (&anchor); }
 	T *Last (void) { return Prev (&anchor); }
 
-	void InsertFirst (Node<T> *n);
-	void InsertLast (Node<T> *n);
+	void InsertFirst (CRFSNode<T> *n);
+	void InsertLast (CRFSNode<T> *n);
 
 	T *UnlinkFirst (void);
 	T *UnlinkLast (void);
 
-	T *Next (Node<T> *n);
-	T *Prev (Node<T> *n);
+	T *Next (CRFSNode<T> *n);
+	T *Prev (CRFSNode<T> *n);
 
 	void Clear (void);
 
 private:
-	Node<T> anchor;
+	CRFSNode<T> anchor;
 	bool clear;
 };
 

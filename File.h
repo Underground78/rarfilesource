@@ -19,14 +19,14 @@
 
 #include "List.h"
 
-class FilePart
+class CRFSFilePart
 {
 public:
-	FilePart (void) : next (NULL), file (INVALID_HANDLE_VALUE),
+	CRFSFilePart (void) : next (NULL), file (INVALID_HANDLE_VALUE),
 		in_rar_offset (0), in_file_offset (0), size (0) { }
-	~FilePart (void) { if (file != INVALID_HANDLE_VALUE) CloseHandle (file); }
+	~CRFSFilePart (void) { if (file != INVALID_HANDLE_VALUE) CloseHandle (file); }
 
-	FilePart *next;
+	CRFSFilePart *next;
 
 	HANDLE file;
 
@@ -35,18 +35,18 @@ public:
 	LONGLONG size;
 };
 
-class File : public Node<File>
+class CRFSFile : public CRFSNode<CRFSFile>
 {
 public:
-	File (void) : size (0), parts (0), list (NULL), array (NULL), m_prev_part (NULL), filename (NULL),
+	CRFSFile (void) : size (0), parts (0), list (NULL), array (NULL), m_prev_part (NULL), filename (NULL),
 		type_known (false), unsupported (false) { }
 
-	~File (void)
+	~CRFSFile (void)
 	{
-		FilePart *fp = list;
+		CRFSFilePart *fp = list;
 		while (fp)
 		{
-			FilePart *tmp = fp;
+			CRFSFilePart *tmp = fp;
 			fp = fp->next;
 			delete tmp;
 		}
@@ -61,9 +61,9 @@ public:
 	LONGLONG size;
 	int parts;
 
-	FilePart *list;
-	FilePart *array;
-	FilePart *m_prev_part;
+	CRFSFilePart *list;
+	CRFSFilePart *array;
+	CRFSFilePart *m_prev_part;
 
 	char *filename;
 	bool type_known;

@@ -254,7 +254,7 @@ void CRARFileSource::UpdateArchiveName (wchar_t *ext, size_t len, int volume, bo
 	SetFilePointerEx (hFile, rh.bytesRemaining, NULL, FILE_CURRENT); \
 	continue;
 
-int CRARFileSource::ScanArchive (wchar_t *archive_name, List<File> *file_list, int *ok_files_found)
+int CRARFileSource::ScanArchive (wchar_t *archive_name, CRFSList<CRFSFile> *file_list, int *ok_files_found)
 {
 	DWORD dwBytesRead;
 	char *filename = NULL;
@@ -264,20 +264,20 @@ int CRARFileSource::ScanArchive (wchar_t *archive_name, List<File> *file_list, i
 	rar_header_t rh;
 	BYTE marker [7];
 	BYTE expected [7] = { 0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x00 };
-	FilePart *new_part, *prev_part;
+	CRFSFilePart *new_part, *prev_part;
 	LONGLONG collected;
 	DWORD ret;
 	DWORD files = 0, volumes = 0;
 	int volume_digits;
-	File *file = NULL;
+	CRFSFile *file = NULL;
 
 	*ok_files_found = 0;
 	LARGE_INTEGER zero = {0};
 
 	MediaType *mType;
-	List<MediaType> mediaTypeList (true);
+	CRFSList<MediaType> mediaTypeList (true);
 
-	Anchor<File> af (&file);
+	Anchor<CRFSFile> af (&file);
 	ArrayAnchor<wchar_t> acrf (&current_rar_filename);
 
 	HANDLE hFile = INVALID_HANDLE_VALUE;
@@ -488,7 +488,7 @@ int CRARFileSource::ScanArchive (wchar_t *archive_name, List<File> *file_list, i
 
 				ASSERT (!file);
 
-				file = new File ();
+				file = new CRFSFile ();
 
 				if (!file)
 				{
@@ -518,7 +518,7 @@ int CRARFileSource::ScanArchive (wchar_t *archive_name, List<File> *file_list, i
 
 			if (!file->unsupported)
 			{
-				new_part = new FilePart ();
+				new_part = new CRFSFilePart ();
 
 				if (!new_part)
 				{
@@ -562,7 +562,7 @@ int CRARFileSource::ScanArchive (wchar_t *archive_name, List<File> *file_list, i
 
 				if (file->parts)
 				{
-					file->array = new FilePart [file->parts];
+					file->array = new CRFSFilePart [file->parts];
 
 					if (!file->array)
 					{
@@ -570,12 +570,12 @@ int CRARFileSource::ScanArchive (wchar_t *archive_name, List<File> *file_list, i
 						return files;
 					}
 
-					FilePart *fp = file->list;
+					CRFSFilePart *fp = file->list;
 					file->list = NULL;
 					for (int i = 0; i < file->parts; i ++)
 					{
-						FilePart *tmp;
-						memcpy (file->array + i, fp, sizeof (FilePart));
+						CRFSFilePart *tmp;
+						memcpy (file->array + i, fp, sizeof (CRFSFilePart));
 						tmp = fp;
 						fp = fp->next;
 						tmp->file = INVALID_HANDLE_VALUE;
@@ -685,8 +685,8 @@ INT_PTR CALLBACK CRARFileSource::DlgFileList (HWND hwndDlg, UINT uMsg, WPARAM wP
 	case WM_INITDIALOG:
 	{
 		int len;
-		List<File> *file_list = (List<File> *) lParam;
-		File *file = file_list->First ();
+		CRFSList<CRFSFile> *file_list = (CRFSList<CRFSFile> *) lParam;
+		CRFSFile *file = file_list->First ();
 		wchar_t *tempString;
 
 		while (file)
@@ -742,7 +742,7 @@ INT_PTR CALLBACK CRARFileSource::DlgFileList (HWND hwndDlg, UINT uMsg, WPARAM wP
 
 STDMETHODIMP CRARFileSource::Load (LPCOLESTR lpwszFileName, const AM_MEDIA_TYPE *pmt)
 {
-	List <File> file_list;
+	CRFSList <CRFSFile> file_list;
 	int num_files, num_ok_files;
 	CAutoLock lck (&m_lock);
 
@@ -788,7 +788,7 @@ STDMETHODIMP CRARFileSource::Load (LPCOLESTR lpwszFileName, const AM_MEDIA_TYPE 
 	}
 	else
 	{
-		m_file = (File *) DialogBoxParam (g_hInst, MAKEINTRESOURCE(IDD_FILELIST), 0, DlgFileList, (LPARAM) &file_list);
+		m_file = (CRFSFile *) DialogBoxParam (g_hInst, MAKEINTRESOURCE(IDD_FILELIST), 0, DlgFileList, (LPARAM) &file_list);
 
 		if (!m_file)
 			return HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);

@@ -294,7 +294,7 @@ STDMETHODIMP CRFSOutputPin::Request (IMediaSample* pSample, DWORD_PTR dwUser)
 	request->pSample = pSample;
 	request->count = 0;
 
-	FilePart *part = m_file->array + pos;
+	CRFSFilePart *part = m_file->array + pos;
 
 	offset2 = llPosition - part->in_file_offset;
 	offset.QuadPart = part->in_rar_offset + offset2;

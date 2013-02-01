@@ -20,10 +20,10 @@
 #include "List.h"
 
 class CRARFileSource;
-class File;
-class FilePart;
+class CRFSFile;
+class CRFSFilePart;
 
-class SubRequest : public Node<SubRequest>
+class SubRequest : public CRFSNode<SubRequest>
 {
 public:
 	SubRequest (void) : file (INVALID_HANDLE_VALUE), expected (0)
@@ -35,7 +35,7 @@ public:
 	OVERLAPPED o;
 };
 
-class ReadRequest : public Node<ReadRequest>
+class ReadRequest : public CRFSNode<ReadRequest>
 {
 public:
 	~ReadRequest (void) { subreqs.Clear (); }
@@ -44,7 +44,7 @@ public:
 	IMediaSample *pSample;
 
 	DWORD count;
-	List<SubRequest> subreqs;
+	CRFSList<SubRequest> subreqs;
 };
 
 class CRFSOutputPin :
@@ -84,16 +84,16 @@ public:
 	STDMETHODIMP BeginFlush (void);
 	STDMETHODIMP EndFlush (void);
 
-	void SetFile (File *file) { m_file = file; }
+	void SetFile (CRFSFile *file) { m_file = file; }
 
 private:
 	DWORD m_align;
 	BOOL m_asked_for_reader;
-	File *m_file;
+	CRFSFile *m_file;
 	BOOL m_flush;
 	HANDLE m_event;
 
-	List<ReadRequest> m_requests;
+	CRFSList<ReadRequest> m_requests;
 	CCritSec m_lock;
 
 	HRESULT ConvertSample (IMediaSample *sample, LONGLONG *pos, DWORD *length, BYTE **buffer);

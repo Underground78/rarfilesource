@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-template <class T> void List<T>::InsertFirst (Node<T> *n)
+template <class T> void CRFSList<T>::InsertFirst (CRFSNode<T> *n)
 {
 	n->next = anchor.next;
 	n->prev = &anchor;
@@ -23,7 +23,7 @@ template <class T> void List<T>::InsertFirst (Node<T> *n)
 	anchor.next = n;
 }
 
-template <class T> void List<T>::InsertLast (Node<T> *n)
+template <class T> void CRFSList<T>::InsertLast (CRFSNode<T> *n)
 {
 	n->next = &anchor;
 	n->prev = anchor.prev;
@@ -32,39 +32,39 @@ template <class T> void List<T>::InsertLast (Node<T> *n)
 	anchor.prev = n;
 }
 
-template <class T> T *List<T>::UnlinkFirst (void)
+template <class T> T *CRFSList<T>::UnlinkFirst (void)
 {
-	Node<T> *n = First ();
+	CRFSNode<T> *n = First ();
 	if (!n)
 		return NULL;
 	n->Unlink ();
 	return (T *) n;
 }
 
-template <class T> T *List<T>::UnlinkLast (void)
+template <class T> T *CRFSList<T>::UnlinkLast (void)
 {
-	Node<T> *n = Last ();
+	CRFSNode<T> *n = Last ();
 	if (!n)
 		return NULL;
 	n->Unlink ();
 	return (T *) n;
 }
 
-template <class T> T *List<T>::Next (Node<T> *n)
+template <class T> T *CRFSList<T>::Next (CRFSNode<T> *n)
 {
 	if (n->next == &anchor)
 		return NULL;
 	return (T *) n->next;
 }
 
-template <class T> T *List<T>::Prev (Node<T> *n)
+template <class T> T *CRFSList<T>::Prev (CRFSNode<T> *n)
 {
 	if (n->prev == &anchor)
 		return NULL;
 	return (T *) n->prev;
 }
 
-template <class T> void List<T>::Clear ()
+template <class T> void CRFSList<T>::Clear ()
 {
 	T *node;
 

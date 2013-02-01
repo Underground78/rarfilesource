@@ -38,7 +38,7 @@ public:
 	BYTE *value;
 };
 
-class CheckByteGroup : public Node<CheckByteGroup>
+class CheckByteGroup : public CRFSNode<CheckByteGroup>
 {
 public:
 	CheckByteGroup () : checkBytes (NULL), checkByteCount (0) { }
@@ -53,7 +53,7 @@ public:
 	unsigned int checkByteCount;
 };
 
-class MediaType : public Node<MediaType>
+class MediaType : public CRFSNode<MediaType>
 {
 public:
 	MediaType () : majorType (GUID_NULL), subType (GUID_NULL), checkByteGroupCount (0) { }
@@ -65,11 +65,11 @@ public:
 
 	GUID majorType;
 	GUID subType;
-	List<CheckByteGroup> checkByteGroups;
+	CRFSList<CheckByteGroup> checkByteGroups;
 	unsigned int checkByteGroupCount;
 };
 
-int getMediaTypeList (List<MediaType> *mediaTypeList);
-int checkFileForMediaType (File *file, List<MediaType> *mediaTypeList, MediaType **foundMediaType);
+int getMediaTypeList (CRFSList<MediaType> *mediaTypeList);
+int checkFileForMediaType (CRFSFile *file, CRFSList<MediaType> *mediaTypeList, MediaType **foundMediaType);
 
 #endif // MEDIATYPE_H

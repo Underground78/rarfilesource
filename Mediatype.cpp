@@ -123,7 +123,7 @@ static int parseCheckBytes (wchar_t *valueData, CheckByteDetails **checkBytes)
 /* parses the HKEY_CLASSES_ROOT\Media Type registry key and
    fills the mediaTypeList with all valid byte marks and their
    corresponding major/subtypes */
-int getMediaTypeList (List<MediaType> *mediaTypeList)
+int getMediaTypeList (CRFSList<MediaType> *mediaTypeList)
 {
 //these values come from http://msdn.microsoft.com/en-us/library/ms724872(VS.85).aspx
 #define MAX_VALUE_SIZE	16384
@@ -243,7 +243,7 @@ int getMediaTypeList (List<MediaType> *mediaTypeList)
 	return mediaTypeCount;
 }
 
-int checkFileForMediaType (File *file, List<MediaType> *mediaTypeList, MediaType **foundMediaType)
+int checkFileForMediaType (CRFSFile *file, CRFSList<MediaType> *mediaTypeList, MediaType **foundMediaType)
 {
 	MediaType *mt;
 	CheckByteGroup *cbg;
