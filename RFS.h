@@ -30,6 +30,9 @@ class CRARFileSource :
 	public IFileSourceFilter
 {
 public:
+	CRARFileSource (LPUNKNOWN punk, HRESULT *phr);
+	~CRARFileSource ();
+
 	DECLARE_IUNKNOWN;
 
 	static CUnknown * WINAPI CreateInstance (LPUNKNOWN punk, HRESULT *phr);
@@ -46,9 +49,6 @@ public:
 	STDMETHODIMP GetCurFile (LPOLESTR *ppszFileName, AM_MEDIA_TYPE *pmt);
 
 private:
-	CRARFileSource (LPUNKNOWN punk, HRESULT *phr);
-	~CRARFileSource ();
-
 	static void UpdateArchiveName (wchar_t *ext, size_t len, int volume, bool new_numbering);
 	int ScanArchive (wchar_t *archive_name, List<File> *file_list, int *known_files_found);
 	static INT_PTR CALLBACK DlgFileList (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
