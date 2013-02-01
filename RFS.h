@@ -46,6 +46,7 @@ public:
 	// CBaseFilter
 	int GetPinCount () { return 1; }
 	CBasePin *GetPin (int n) { return n == 0 ? &m_pin : NULL; }
+	STDMETHODIMP QueryFilterInfo (FILTER_INFO* pInfo);
 
 	// IFileSourceFilter interface
 	STDMETHODIMP Load (LPCOLESTR lpwszFileName, const AM_MEDIA_TYPE *pmt);

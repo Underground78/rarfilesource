@@ -830,3 +830,16 @@ STDMETHODIMP CRARFileSource::GetCurFile (LPOLESTR *ppszFileName, AM_MEDIA_TYPE *
 
 	return NOERROR;
 }
+
+STDMETHODIMP CRARFileSource::QueryFilterInfo (FILTER_INFO* pInfo)
+{
+	CheckPointer(pInfo, E_POINTER);
+	ValidateReadWritePtr(pInfo, sizeof(FILTER_INFO));
+	wcscpy_s(pInfo->achName, RARFileSourceName);
+	pInfo->pGraph = m_pGraph;
+	if (m_pGraph) {
+		m_pGraph->AddRef();
+	}
+
+	return S_OK;
+}
