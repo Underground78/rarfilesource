@@ -17,7 +17,9 @@
 
 #include <windows.h>
 #include <streams.h>
+#ifdef STANDALONE_FILTER
 #include <initguid.h>
+#endif
 #include <strsafe.h>
 
 #include "RFS.h"
@@ -35,6 +37,8 @@
 //{1AC0BEBD-4D2B-45AD-BCEB-F2C41C5E3788}
 DEFINE_GUID(MEDIASUBTYPE_Matroska,
 0x1AC0BEBD, 0x4D2B, 0x45AD, 0xBC, 0xEB, 0xF2, 0xC4, 0x1C, 0x5E, 0x37, 0x88);
+
+#ifdef STANDALONE_FILTER
 
 // Setup information
 const AMOVIESETUP_MEDIATYPE sudPinTypes =
@@ -62,7 +66,8 @@ const AMOVIESETUP_FILTER sudRARFileSource =
 	RARFileSourceName,		// Filter name
 	MERIT_UNLIKELY,			// Filter merit
 	1,						// Number of pins
-	&sudpPin				// Pin information
+	&sudpPin,				// Pin information
+	CLSID_LegacyAmFilterCategory
 };
 
 // List of class IDs and creator functions for the class factory.
@@ -80,6 +85,7 @@ CFactoryTemplate g_Templates [] =
 
 int g_cTemplates = sizeof (g_Templates) / sizeof (g_Templates [0]);
 
+#endif
 
 /* static */
 file_type_t CRARFileSource::s_file_types [] =
@@ -100,6 +106,7 @@ file_type_t CRARFileSource::s_file_types [] =
 	{ NULL, NULL }
 };
 
+#ifdef STANDALONE_FILTER
 
 extern "C" BOOL WINAPI DllEntryPoint (HINSTANCE, ULONG, LPVOID);
 
@@ -197,6 +204,8 @@ STDAPI DllUnregisterServer ()
 
 	return AMovieDllRegisterServer2 (FALSE);
 }
+
+#endif
 
 CRARFileSource::CRARFileSource (LPUNKNOWN punk, HRESULT *phr) :
 	CBaseFilter (RARFileSourceName, punk, &m_lock, __uuidof(CRARFileSource)),
@@ -822,7 +831,11 @@ STDMETHODIMP CRARFileSource::Load (LPCOLESTR lpwszFileName, const AM_MEDIA_TYPE 
 	}
 	else
 	{
+#ifdef STANDALONE_FILTER
 		m_file = (CRFSFile *) DialogBoxParam (g_hInst, MAKEINTRESOURCE(IDD_FILELIST), 0, DlgFileList, (LPARAM) &file_list);
+#else
+		m_file = (CRFSFile *) DialogBoxParam (GetModuleHandle(NULL), MAKEINTRESOURCE(IDD_FILELIST), 0, DlgFileList, (LPARAM) &file_list);
+#endif
 
 		if (!m_file)
 		{
