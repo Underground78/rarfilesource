@@ -19,6 +19,7 @@
 #include <strsafe.h>
 
 #include "Utils.h"
+#include "RFS.h"
 
 void ErrorMsg (DWORD errorCode, wchar_t *format, ...)
 {
@@ -44,7 +45,7 @@ void ErrorMsg (DWORD errorCode, wchar_t *format, ...)
 	}
 
 	DbgLog((LOG_ERROR, 0, L"%s", buffer));
-	MessageBox (NULL, buffer, L"RAR File Source", MB_OK | MB_ICONERROR);
+	MessageBox (NULL, buffer, RARFileSourceName, MB_OK | MB_ICONERROR);
 }
 
 #ifdef _DEBUG

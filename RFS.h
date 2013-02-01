@@ -19,6 +19,8 @@
 
 #include "OutputPin.h"
 
+#define RARFileSourceName   L"RAR File Source"
+
 typedef struct
 {
 	const char *extension;

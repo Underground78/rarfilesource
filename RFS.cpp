@@ -62,7 +62,7 @@ const AMOVIESETUP_PIN sudpPin =
 const AMOVIESETUP_FILTER sudRARFileSource =
 {
 	&CLSID_RARFileSource,	// Filter CLSID
-	L"RAR File Source",		// Filter name
+	RARFileSourceName,		// Filter name
 	MERIT_UNLIKELY,			// Filter merit
 	1,						// Number of pins
 	&sudpPin				// Pin information
@@ -73,7 +73,7 @@ const AMOVIESETUP_FILTER sudRARFileSource =
 CFactoryTemplate g_Templates [] =
 {
 	{
-		L"RAR File Source",
+		RARFileSourceName,
 		&CLSID_RARFileSource,
 		CRARFileSource::CreateInstance,
 		NULL,
@@ -191,7 +191,7 @@ STDAPI DllUnregisterServer ()
 }
 
 CRARFileSource::CRARFileSource (LPUNKNOWN punk, HRESULT *phr) :
-	CBaseFilter (L"RAR File Source", punk, &m_lock, CLSID_RARFileSource),
+	CBaseFilter (RARFileSourceName, punk, &m_lock, CLSID_RARFileSource),
 	m_pin (this, &m_lock, phr),
 	m_file_name (NULL),
 	m_file (NULL)
