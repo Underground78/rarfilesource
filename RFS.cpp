@@ -803,6 +803,7 @@ STDMETHODIMP CRARFileSource::Load (LPCOLESTR lpwszFileName, const AM_MEDIA_TYPE 
 
 	if (!num_ok_files)
 	{
+		file_list.Clear ();
 		return E_UNEXPECTED; // TODO: Figure out a better error code.
 	}
 
@@ -818,7 +819,10 @@ STDMETHODIMP CRARFileSource::Load (LPCOLESTR lpwszFileName, const AM_MEDIA_TYPE 
 		m_file = (CRFSFile *) DialogBoxParam (g_hInst, MAKEINTRESOURCE(IDD_FILELIST), 0, DlgFileList, (LPARAM) &file_list);
 
 		if (!m_file)
+		{
+			file_list.Clear ();
 			return HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
+		}
 	}
 
 	if (pmt)
