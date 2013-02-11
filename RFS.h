@@ -21,6 +21,13 @@
 
 #define RARFileSourceName   L"RAR File Source"
 
+#define FACILITY_RFS 1303
+#define RFS_E_NO_FILES          (HRESULT)0xA5170001
+#define RFS_E_COMPRESSED        (HRESULT)0xA5170002
+#define RFS_E_ENCRYPTED         (HRESULT)0xA5170003
+#define RFS_E_MISSING_VOLS      (HRESULT)0xA5170004
+#define RFS_E_ABORT             (HRESULT)0xA5170005
+
 typedef struct
 {
 	const char *extension;
@@ -54,7 +61,7 @@ public:
 
 private:
 	static void UpdateArchiveName (wchar_t *ext, size_t len, int volume, bool new_numbering);
-	int ScanArchive (wchar_t *archive_name, CRFSList<CRFSFile> *file_list, int *known_files_found);
+	HRESULT ScanArchive (wchar_t *archive_name, CRFSList<CRFSFile> *file_list, int *files_found, int *known_files_found);
 	static INT_PTR CALLBACK DlgFileList (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 	CRFSOutputPin m_pin;
