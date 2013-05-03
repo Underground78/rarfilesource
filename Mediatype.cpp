@@ -136,7 +136,7 @@ int getMediaTypeList (CRFSList<MediaType> *mediaTypeList)
 	LONG ret, retSub, retVal;
 
 	HKEY mTypeKey, majorTypeKey, subTypeKey;
-	DWORD valueType, valueSize, valueNameSize;
+	DWORD valueType, valueSize = 0, valueNameSize;
 	wchar_t *valueData;
 	int mediaTypeCount = 0;
 	MediaType *newType;
