@@ -249,7 +249,7 @@ int checkFileForMediaType (CRFSFile *file, CRFSList<MediaType> *mediaTypeList, M
 	MediaType *mt;
 	CheckByteGroup *cbg;
 	bool matches;
-	BOOL ret;
+	HRESULT hr;
 	LONG lBytesRead;
 	LONGLONG actOffset;
 	BYTE *necessaryBytes;
@@ -286,9 +286,9 @@ int checkFileForMediaType (CRFSFile *file, CRFSList<MediaType> *mediaTypeList, M
 				}
 
 				// read the necessary amount of bytes to compare to value (after masking)
-				ret = file->SyncRead (actOffset, cbg->checkBytes [i].byteCount, necessaryBytes, &lBytesRead);
+				hr = file->SyncRead (actOffset, cbg->checkBytes [i].byteCount, necessaryBytes, &lBytesRead);
 
-				if (ret != S_OK)
+				if (hr != S_OK)
 				{
 					matches = false;
 					delete [] necessaryBytes;
