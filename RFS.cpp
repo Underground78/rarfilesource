@@ -848,14 +848,14 @@ STDMETHODIMP CRARFileSource::GetCurFile (LPOLESTR *ppszFileName, AM_MEDIA_TYPE *
 	if (!ppszFileName)
 		return E_POINTER;
 
-	if (m_file_name != NULL)
+	if (m_file)
 	{
-		DWORD n = sizeof (WCHAR) * (lstrlen (m_file_name) + 1);
+		DWORD n = sizeof (WCHAR) * (strlen (m_file->filename) + 1);
 
 		*ppszFileName = (LPOLESTR) CoTaskMemAlloc (n);
 
 		if (*ppszFileName != NULL)
-			CopyMemory (*ppszFileName, m_file_name, n);
+			mbstowcs (*ppszFileName, m_file->filename, n);
 		else
 			return E_OUTOFMEMORY;
 	}
