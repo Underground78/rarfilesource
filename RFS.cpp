@@ -288,6 +288,7 @@ HRESULT CRARFileSource::ScanArchive (wchar_t *archive_name, CRFSList<CRFSFile> *
 	int volume_digits;
 	CRFSFile *file = NULL;
 
+	*files_found = 0;
 	*ok_files_found = 0;
 	int compressed_files_found = 0;
 	int encrypted_files_found = 0;
